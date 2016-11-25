@@ -37,8 +37,21 @@ battle.on('start', function (data) {
 
 battle.on('turn', function (data) {
     console.log('TURN', data);
-
     // TODO: render the characters
+	var heroes, monsters;
+	heroes = document.getElementById("heroes");
+	heroes = heroes.lastChild;
+	monsters = document.getElementById("monsters");
+	monsters = monsters.lastChild;
+	var arrayH, arrayM;
+	arrayH = Battle.prototype.characters.allFrom('heroes');
+	for  (var obj in arrayH){
+		heroes.innerHTML = '<li data-chara-id=obj>
+        obj '(HP: '<strong>obj.hp</strong>'/'obj.maxHp', MP: '<strong>obj.mp</strong>'/'obj.maxMp' )'
+    </li>;'
+	} 
+	
+	
     // TODO: highlight current character
     // TODO: show battle actions form
 });
