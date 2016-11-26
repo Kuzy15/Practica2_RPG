@@ -57,11 +57,13 @@ battle.on('turn', function (data) {
 	}
 	
 	for (var obj in arrayM) {
-			monsters.innerHTML +=`<li data-chara-id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			monsters.innerHTML +=`<li id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
 			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;	
 	}
     // TODO: highlight current character
-	
+	var currentCh = document.querySelector(`#${data.activeCharacterId}`);
+	console.log("elese", currentCh);
+	currentCh.classList.add("active");
 	
 	
 	
