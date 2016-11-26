@@ -2,6 +2,8 @@ var battle = new RPG.Battle();
 var actionForm, spellForm, targetForm;
 var infoPanel;
 
+
+
 function prettifyEffect(obj) {
     return Object.keys(obj).map(function (key) {
         var sign = obj[key] > 0 ? '+' : ''; // show + sign for positive effects
@@ -31,28 +33,39 @@ battle.setup({
     }
 });
 
+console.log(battle.setup);
+
 battle.on('start', function (data) {
     console.log('START', data);
+
 });
 
 battle.on('turn', function (data) {
     console.log('TURN', data);
+	//console.log ('Battle', battle);
     // TODO: render the characters
 	var heroes, monsters;
-	heroes = document.getElementById("heroes");
-	heroes = heroes.lastChild;
-	monsters = document.getElementById("monsters");
-	monsters = monsters.lastChild;
+	heroes = document.querySelector('.character-list');
+	//He tenido que cambiar el nombre al la lista de los nombres en el index pq no sabia como acceder a ella.
+	monsters = document.querySelector('.character-list2');
 	var arrayH, arrayM;
-	arrayH = Battle.prototype.characters.allFrom('heroes');
-	for  (var obj in arrayH){
-		heroes.innerHTML = '<li data-chara-id=obj>
-        obj '(HP: '<strong>obj.hp</strong>'/'obj.maxHp', MP: '<strong>obj.mp</strong>'/'obj.maxMp' )'
-    </li>;'
-	} 
+	arrayH = battle.characters.allFrom('heroes');
+	arrayM = battle.characters.allFrom('monsters');
+	for (var obj in arrayH) {
+			heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
+			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;	
+	}
 	
-	
+	for (var obj in arrayM) {
+			monsters.innerHTML +=`<li data-chara-id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;	
+	}
     // TODO: highlight current character
+	
+	
+	
+	
+	
     // TODO: show battle actions form
 });
 
@@ -74,6 +87,7 @@ window.onload = function () {
     targetForm = document.querySelector('form[name=select-target]');
     spellForm = document.querySelector('form[name=select-spell]');
     infoPanel = document.querySelector('#battle-info');
+	
 
     actionForm.addEventListener('submit', function (evt) {
         evt.preventDefault();

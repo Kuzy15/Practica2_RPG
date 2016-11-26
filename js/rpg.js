@@ -4,10 +4,9 @@ module.exports = {
   "entities": require('./src/entities.js')
 };
 
-//e
+
 },{"./src/Battle.js":3,"./src/entities.js":10}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
-//
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
