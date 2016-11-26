@@ -4,7 +4,7 @@ module.exports = {
   "entities": require('./src/entities.js')
 };
 
-
+//e
 },{"./src/Battle.js":3,"./src/entities.js":10}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
