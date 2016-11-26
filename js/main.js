@@ -53,22 +53,29 @@ battle.on('turn', function (data) {
 	arrayM = battle.characters.allFrom('monsters');
 	for (var obj in arrayH) {
 			heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
-			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;	
+			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
 	}
-	
+
 	for (var obj in arrayM) {
 			monsters.innerHTML +=`<li id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
-			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;	
+			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
 	}
     // TODO: highlight current character
 	var currentCh = document.querySelector(`#${data.activeCharacterId}`);
 	console.log("elese", currentCh);
 	currentCh.classList.add("active");
-	
-	
-	
-	
+
+
     // TODO: show battle actions form
+    actionForm.style.display="block";
+    var actions = document.querySelector('.choices1');
+    var options = battle.options.list();
+
+    for(var obj in options){
+
+      actions.innerHTML += <li><label><input type="radio" name="option" value="${obj}"> &{obj}</label></li>
+
+    }
 });
 
 battle.on('info', function (data) {
@@ -89,7 +96,7 @@ window.onload = function () {
     targetForm = document.querySelector('form[name=select-target]');
     spellForm = document.querySelector('form[name=select-spell]');
     infoPanel = document.querySelector('#battle-info');
-	
+
 
     actionForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
