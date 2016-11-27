@@ -68,14 +68,17 @@ battle.on('turn', function (data) {
 
     // TODO: show battle actions form
     actionForm.style.display="block";
-    var actions = document.querySelector('.choices1');
+   var actions = document.querySelector('.choices1');
     var options = battle.options.list();
 
-    for(var obj in options){
 
-      actions.innerHTML += <li><label><input type="radio" name="option" value="${obj}"> &{obj}</label></li>
 
+      for(var i = 0; i< options.length;++i){
+
+      actions.innerHTML += '<li><label><input type="radio" name="option" value="${options[i]}">${options[i]}</label></li>';
     }
+
+
 });
 
 battle.on('info', function (data) {
