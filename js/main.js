@@ -44,7 +44,6 @@ battle.on('turn', function (data) {
 	//console.log ('Battle', battle);
     // HECHO - TODO: render the characters. No sabemos como poner bat 2, si los que nos devuelve el metodo son todos bat.
 	var heroes, monsters;
-  var dead = false;
 	heroes = document.querySelector('.character-list');
 	//He tenido que cambiar el nombre al la lista de los nombres en el index pq no sabia como acceder a ella.
 	monsters = document.querySelector('.character-list2');
@@ -53,8 +52,8 @@ battle.on('turn', function (data) {
 	arrayM = battle.characters.allFrom('monsters');
 	heroes.innerHTML = "";
 	for (var obj in arrayH) {
-     dead = battle.character.isDead();
-    if(dead){
+     var dead = battle.character.isDead();//No se como llamar a este método
+    if(dead){//si esta muerto se añade la clase 'dead'. Otra posibilidad: if(obj.isDead())... pero tampoco va
       heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}" class="dead">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
     }
