@@ -53,15 +53,13 @@ battle.on('turn', function (data) {
 	arrayM = battle.characters.allFrom('monsters');
 	heroes.innerHTML = "";
 	for (var obj in arrayH) {
-    //var dead = battle.character.isDead();//No se como llamar a este método
-    //if(dead){//si esta muerto se añade la clase 'dead'. Otra posibilidad: if(obj.isDead())... pero tampoco va
-    /*  heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}" class="dead">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
-			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-    }*/
-    
+
 			heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-    
+      /*if(arrayH[obj].hp === 0){
+        var heroeDead = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');
+        heroeDead.classList.add("dead");
+      }   NO FUNCIONAAAAAAAAAAAAAA */
 	}
 	monsters.innerHTML = "";
 	var i = 0;
@@ -72,18 +70,22 @@ battle.on('turn', function (data) {
 			i++;
 		}
 		if ( arrayM[obj].name === 'bat' && i === 2){
-			monsters.innerHTML +=`<li id=${arrayM[obj].name} 2">${arrayM[obj].name} 2 (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
-			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
+			monsters.innerHTML +=`<li data-chara-id="${arrayM[obj].name} 2">${arrayM[obj].name} 2 (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;//AQUI ANTES SOLO ERA "ID" Y AHORA ES "DATA-CHARA-ID"
 
 
 		}else{
-			monsters.innerHTML +=`<li id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			monsters.innerHTML +=`<li data-chara-id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
 			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
 		}
+    /*if(arrayM[obj].hp === 0){
+      var monsterDead = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');
+      monsterDead.classList.add("dead");
+    } NOOOOO FUNCIONAAAAAAAAAAAAAA */
 	}
     // HECHO - TODO: highlight current character
 	//el querySelector no funciona con bat 2.
-	var currentCh = document.querySelector(`#${data.activeCharacterId}`);
+	var currentCh = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');//AQUI SE LLAMABA SOLO POR "ID", LO CORRECTO ERA"DATA-CHAR-ID"
 	currentCh.classList.add("active");
 
 
@@ -186,11 +188,11 @@ window.onload = function () {
 		}
 		else{
 			//actioinForm.style.display = 'block';
-			
-			
-			
-			
-			
+
+
+
+
+
 		}
     });
 
