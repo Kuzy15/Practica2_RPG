@@ -43,24 +43,25 @@ battle.on('turn', function (data) {
     console.log('TURN', data);
 	//console.log ('Battle', battle);
     // HECHO - TODO: render the characters. No sabemos como poner bat 2, si los que nos devuelve el metodo son todos bat.
-	var heroes, monsters;
-	heroes = document.querySelector('.character-list');
+	var heroes, monsters, listas;
+	listas = document.querySelectorAll('.character-list');
+	heroes = listas[0];
 	//He tenido que cambiar el nombre al la lista de los nombres en el index pq no sabia como acceder a ella.
-	monsters = document.querySelector('.character-list2');
+	monsters = listas[1];
 	var arrayH, arrayM;
 	arrayH = battle.characters.allFrom('heroes');
 	arrayM = battle.characters.allFrom('monsters');
 	heroes.innerHTML = "";
 	for (var obj in arrayH) {
-     var dead = battle.character.isDead();//No se como llamar a este método
-    if(dead){//si esta muerto se añade la clase 'dead'. Otra posibilidad: if(obj.isDead())... pero tampoco va
-      heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}" class="dead">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
+    //var dead = battle.character.isDead();//No se como llamar a este método
+    //if(dead){//si esta muerto se añade la clase 'dead'. Otra posibilidad: if(obj.isDead())... pero tampoco va
+    /*  heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}" class="dead">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-    }
-    else{
+    }*/
+    
 			heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-    }
+    
 	}
 	monsters.innerHTML = "";
 	var i = 0;
@@ -71,7 +72,7 @@ battle.on('turn', function (data) {
 			i++;
 		}
 		if ( arrayM[obj].name === 'bat' && i === 2){
-			monsters.innerHTML +=`<li id="${arrayM[obj].name} 2">${arrayM[obj].name} 2 (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			monsters.innerHTML +=`<li id=${arrayM[obj].name} 2">${arrayM[obj].name} 2 (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
 			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
 
 
@@ -82,18 +83,18 @@ battle.on('turn', function (data) {
 	}
     // HECHO - TODO: highlight current character
 	//el querySelector no funciona con bat 2.
-	var currentCh = document.querySelector(`[id =${data.activeCharacterId}]`);
+	var currentCh = document.querySelector(`#${data.activeCharacterId}`);
 	currentCh.classList.add("active");
 
 
     // HECHO - TODO: show battle actions form
-    actionForm.style.display="block";
-   var actions = document.querySelector('.choices1');
+    actionForm.style.display = "block";
+   var actions = actionForm.getElementsByClassName('choices');
     var options = battle.options.list();
 
       for(var i = 0; i< options.length;++i){
 
-      actions.innerHTML += `<li><label><input type="radio" name="option" value="${options[i]}">${options[i]}</label></li>`;
+      actions[0].innerHTML += `<li><label><input type="radio" name="option" value="${options[i]}">${options[i]}</label></li>`;
     }
 
 
@@ -150,7 +151,7 @@ window.onload = function () {
 
 		if (action === 'attack'){
 			targetForm.style.display = 'block';
-			var targets = document.querySelector('.choices2');
+			var targets = targetForm.getElementsByClassName('choices');
 			var charParty, enemiesParty;
 			charParty = battle._activeCharacter.party;
 			if (charParty === 'monsters'){
@@ -158,30 +159,38 @@ window.onload = function () {
 			}
 			else enemiesParty = 'monsters';
 			var chars = battle.characters.allFrom(enemiesParty);
-				targets.innerHTML = "";
+			targets[0].innerHTML = "";
 			for(var obj in chars){
 
-			targets.innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" >${chars[obj].name}</label></li>`;
+			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" >${chars[obj].name}</label></li>`;
     }
 		}
 
 		else if (action === 'cast'){
 			spellForm.style.display = 'block';
-			var spells = document.querySelector('.choices3');
+			var spells = spellForm.getElementsByClassName('choices');
 			var charParty = battle._activeCharacter.party;
 			var partyGrimoire = battle._grimoires[charParty];
 			var spellButton = spellForm.elements[0];
 			console.log(battle);
 			if (partyGrimoire.hasOwnProperty('fireball') ){
 				spellButton.disabled = 'false';
-				spells.innerHTML = "";
+				spells[0].innerHTML = "";
 				for (var obj in partyGrimoire){
-					spells.innerHTML += `<li><label><input type="radio" name="option" value="${partyGrimoire[obj]}" >${partyGrimoire[obj]}</label></li>`;
+					spells[0].innerHTML += `<li><label><input type="radio" name="option" value="${partyGrimoire[obj]}" >${partyGrimoire[obj]}</label></li>`;
 				}
 			}
 			else{
 				spellButton.disabled = 'true';
 			}
+		}
+		else{
+			//actioinForm.style.display = 'block';
+			
+			
+			
+			
+			
 		}
     });
 
@@ -201,7 +210,7 @@ window.onload = function () {
     .addEventListener('click', function (evt) {
         evt.preventDefault();
         // TODO: cancel current battle options
-		 battle.options.cancel;
+		 battle.options.cancel();
         // TODO: hide this form
 		targetForm.style.display = 'none';
         // TODO: go to select action menu
@@ -223,7 +232,7 @@ window.onload = function () {
     .addEventListener('click', function (evt) {
         evt.preventDefault();
         // TODO: cancel current battle options
-		battle.options.cancel;
+		battle.options.cancel();
         // TODO: hide this form
 		spellForm.style.display = 'none';
         // TODO: go to select action menu
