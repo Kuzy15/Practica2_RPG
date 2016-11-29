@@ -10,7 +10,7 @@ function prettifyEffect(obj) {
         return `${sign}${obj[key]} ${key}`;
     }).join(', ');
 }
-
+ 
 
 battle.setup({
     heroes: {
@@ -41,12 +41,10 @@ battle.on('start', function (data) {
 
 battle.on('turn', function (data) {
     console.log('TURN', data);
-	//console.log ('Battle', battle);
     // HECHO - TODO: render the characters. No sabemos como poner bat 2, si los que nos devuelve el metodo son todos bat.
 	var heroes, monsters, listas;
 	listas = document.querySelectorAll('.character-list');
 	heroes = listas[0];
-	//He tenido que cambiar el nombre al la lista de los nombres en el index pq no sabia como acceder a ella.
 	monsters = listas[1];
 	var arrayH, arrayM;
 	arrayH = battle.characters.allFrom('heroes');
@@ -93,16 +91,16 @@ battle.on('turn', function (data) {
     actionForm.style.display = "block";
    var actions = actionForm.getElementsByClassName('choices');
     var options = battle.options.list();
-
+	actions[0].innerHTML = "";
       for(var i = 0; i< options.length;++i){
 
-      actions[0].innerHTML += `<li><label><input type="radio" name="option" value="${options[i]}">${options[i]}</label></li>`;
+      actions[0].innerHTML += `<li><label><input type="radio" name="option" value="${options[i]}" required>${options[i]}</label></li>`;
     }
 
 
 });
 
-battle.on('info', function (data) {
+battle.on('info', function (data) { 
     console.log('INFO', data);
     // TODO: display turn info in the #battle-info panel
 	 infoPanel = document.querySelector('#battle-info');
@@ -111,13 +109,13 @@ battle.on('info', function (data) {
 	 }
 	 if (data.action === 'attack'){
 		 var effectsTxT = prettifyEffect(data.effect || {});
-		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> attacked <strong>${data.targetId}</strong> ${data.success ? ' and caused ${effectsTxT}'
-			: 'and failed.' }`;
+		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> attacked <strong>${data.targetId}</strong> ${data.success ? ' and caused' 
+		 : 'and failed '} ${data.success ? effectsTxT : ''}`;
 	 }
-	if (data.action === 'cast'){
+	if (data.action === 'cast'){ 
 		var effectsTxT = prettifyEffect(data.effect || {});
-		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> casted <em>${data.spell}</em> ${data.success ? ' and caused'
-			: 'and failed.' }`;
+		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> casted <em>${data.scrollName}</em> on <strong>${data.targetId}</strong> ${data.success ? ' and caused'
+			: 'and failed' } ${data.success ? effectsTxT : ''}`;
 
 
 
@@ -138,7 +136,7 @@ window.onload = function () {
     spellForm = document.querySelector('form[name=select-spell]');
     infoPanel = document.querySelector('#battle-info');
 
-
+	
     actionForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
 
@@ -164,7 +162,7 @@ window.onload = function () {
 			targets[0].innerHTML = "";
 			for(var obj in chars){
 
-			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" >${chars[obj].name}</label></li>`;
+			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" required>${chars[obj].name}</label></li>`;
     }
 		}
 
@@ -173,26 +171,21 @@ window.onload = function () {
 			var spells = spellForm.getElementsByClassName('choices');
 			var charParty = battle._activeCharacter.party;
 			var partyGrimoire = battle._grimoires[charParty];
-			var spellButton = spellForm.elements[0];
-			console.log(battle);
+			var spellButton = spellForm.lastElementChild;
+			spellButton = spellButton.firstChild;
 			if (partyGrimoire.hasOwnProperty('fireball') ){
-				spellButton.disabled = 'false';
-				spells[0].innerHTML = "";
-				for (var obj in partyGrimoire){
-					spells[0].innerHTML += `<li><label><input type="radio" name="option" value="${partyGrimoire[obj]}" >${partyGrimoire[obj]}</label></li>`;
+				console.log('va',partyGrimoire);				
+				spellButton.disabled = false;  
+				spells[0].innerHTML = ""; 
+				for (var obj in partyGrimoire){ 
+					spells[0].innerHTML += `<li><label><input type="radio" name="option" value="${partyGrimoire[obj].name}" required>${partyGrimoire[obj].name}</label></li>`;
 				}
 			}
-			else{
-				spellButton.disabled = 'true';
+			else{  
+				spells[0].innerHTML = "";
+				console.log(spellButton);
+				spellButton.disabled = true;
 			}
-		}
-		else{
-			//actioinForm.style.display = 'block';
-
-
-
-
-
 		}
     });
 
@@ -228,6 +221,24 @@ window.onload = function () {
 		spellForm.style.display = 'none';
         // TODO: go to select target menu
 		targetForm.style.display = 'block';
+			var targets = targetForm.getElementsByClassName('choices');
+			var charParty, enemiesParty;
+			charParty = battle._activeCharacter.party;
+			if (charParty === 'monsters'){
+				enemiesParty = 'heroes';
+			}
+			else enemiesParty = 'monsters';
+			var chars;
+			console.log(spell);  
+			if(spell === 'health'){
+			chars = battle.characters.allFrom(charParty);
+			}
+			else {chars = battle.characters.allFrom(enemiesParty);}
+			targets[0].innerHTML = "";
+			for(var obj in chars){
+
+			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" required>${chars[obj].name}</label></li>`;
+			}
     });
 
     spellForm.querySelector('.cancel')
