@@ -183,7 +183,6 @@ window.onload = function () {
 			}
 			else{  
 				spells[0].innerHTML = "";
-				console.log(spellButton);
 				spellButton.disabled = true;
 			}
 		}
