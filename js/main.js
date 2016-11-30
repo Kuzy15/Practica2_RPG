@@ -20,7 +20,7 @@ battle.setup({
         ],
         grimoire: [
             RPG.entities.scrolls.health,
-            RPG.entities.scrolls.fireball
+            RPG.entities.scrolls.fireball 
         ]
     },
     monsters: {
@@ -49,37 +49,34 @@ battle.on('turn', function (data) {
 	var arrayH, arrayM;
 	arrayH = battle.characters.allFrom('heroes');
 	arrayM = battle.characters.allFrom('monsters');
+	HeroesKeys = Object.keys(arrayH);
+	MonstersKeys = Object.keys(arrayM);
 	heroes.innerHTML = "";
+	var j = 0;
 	for (var obj in arrayH) {
+		
 
-			heroes.innerHTML +=`<li data-chara-id="${arrayH[obj].name}">${arrayH[obj].name} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
+			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-      /*if(arrayH[obj].hp === 0){
-        var heroeDead = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');
+      if(arrayH[obj].hp === 0){
+        var heroeDead = document.querySelector('[data-chara-id="'+arrayH[obj].name+'"]');
         heroeDead.classList.add("dead");
-      }   NO FUNCIONAAAAAAAAAAAAAA */
+      }  
+		j++;
 	}
 	monsters.innerHTML = "";
 	var i = 0;
 	for (var obj in arrayM) {
 
-		if (arrayM[obj].name === 'bat'){
-
-			i++;
-		}
-		if ( arrayM[obj].name === 'bat' && i === 2){
-			monsters.innerHTML +=`<li data-chara-id="${arrayM[obj].name} 2">${arrayM[obj].name} 2 (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
-			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;//AQUI ANTES SOLO ERA "ID" Y AHORA ES "DATA-CHARA-ID"
-
-
-		}else{
-			monsters.innerHTML +=`<li data-chara-id="${arrayM[obj].name}">${arrayM[obj].name} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
 			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
-		}
-    /*if(arrayM[obj].hp === 0){
-      var monsterDead = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');
+			
+		
+    if(arrayM[obj].hp === 0){
+      var monsterDead = document.querySelector('[data-chara-id="'+arrayM[obj].name+'"]');
       monsterDead.classList.add("dead");
-    } NOOOOO FUNCIONAAAAAAAAAAAAAA */
+    } 
+	i++	
 	}
     // HECHO - TODO: highlight current character
 	//el querySelector no funciona con bat 2.
@@ -125,9 +122,47 @@ battle.on('info', function (data) {
 
 battle.on('end', function (data) {
     console.log('END', data);
-
     // TODO: re-render the parties so the death of the last character gets reflected
+	var heroes, monsters, listas;
+	listas = document.querySelectorAll('.character-list');
+	heroes = listas[0];
+	monsters = listas[1];
+	var arrayH, arrayM;
+	arrayH = battle.characters.allFrom('heroes');
+	arrayM = battle.characters.allFrom('monsters');
+	HeroesKeys = Object.keys(arrayH);
+	MonstersKeys = Object.keys(arrayM);
+	heroes.innerHTML = "";
+	var j = 0;
+	for (var obj in arrayH) {
+		
+
+			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
+			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
+      if(arrayH[obj].hp === 0){
+        var heroeDead = document.querySelector('[data-chara-id="'+arrayH[obj].name+'"]');
+        heroeDead.classList.add("dead");
+      }  
+		j++;
+	}
+	monsters.innerHTML = "";
+	var i = 0;
+	for (var obj in arrayM) {
+
+			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
+			
+		
+    if(arrayM[obj].hp === 0){
+      var monsterDead = document.querySelector('[data-chara-id="'+arrayM[obj].name+'"]');
+      monsterDead.classList.add("dead");
+    } 
+	i++	
+	}
+	
+	actionForm.style.display = 'none';
     // TODO: display 'end of battle' message, showing who won
+	infoPanel.innerHTML = `Battle is over! Winners were ${data.winner}`;
 });
 
 window.onload = function () {
@@ -159,10 +194,15 @@ window.onload = function () {
 			}
 			else enemiesParty = 'monsters';
 			var chars = battle.characters.allFrom(enemiesParty);
+			var charKeys = Object.keys(chars);
 			targets[0].innerHTML = "";
+			var i = 0;
 			for(var obj in chars){
+				if (chars[obj].hp > 0){
 
-			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" required>${chars[obj].name}</label></li>`;
+			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+				}
+				i++;
     }
 		}
 
@@ -173,8 +213,7 @@ window.onload = function () {
 			var partyGrimoire = battle._grimoires[charParty];
 			var spellButton = spellForm.lastElementChild;
 			spellButton = spellButton.firstChild;
-			if (partyGrimoire.hasOwnProperty('fireball') ){
-				console.log('va',partyGrimoire);				
+			if (partyGrimoire.hasOwnProperty('fireball') ){				
 				spellButton.disabled = false;  
 				spells[0].innerHTML = ""; 
 				for (var obj in partyGrimoire){ 
@@ -208,7 +247,12 @@ window.onload = function () {
         // TODO: hide this form
 		targetForm.style.display = 'none';
         // TODO: go to select action menu
-		actionForm.style.display = 'block';
+		var action =  battle._action.action; 
+		if (action === 'cast'){
+			spellForm.style.display = 'block';
+		}else{
+		actionForm.style.display = 'block'; 
+		}
     });
 
     spellForm.addEventListener('submit', function (evt) {
@@ -228,15 +272,19 @@ window.onload = function () {
 			}
 			else enemiesParty = 'monsters';
 			var chars;
-			console.log(spell);  
 			if(spell === 'health'){
 			chars = battle.characters.allFrom(charParty);
 			}
 			else {chars = battle.characters.allFrom(enemiesParty);}
+			charKeys = Object.keys(chars);
 			targets[0].innerHTML = "";
+			var i = 0;
 			for(var obj in chars){
+				if (chars[obj].hp > 0){ 
 
-			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${chars[obj].name}" required>${chars[obj].name}</label></li>`;
+			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+				}
+				i++;
 			}
     });
 
