@@ -163,12 +163,14 @@ battle.on('end', function (data) {
 	actionForm.style.display = 'none';
     // TODO: display 'end of battle' message, showing who won
 	infoPanel.innerHTML = `Battle is over! Winners were ${data.winner}`;
+  againForm.style.display = "block";
 });
 
 window.onload = function () {
     actionForm = document.querySelector('form[name=select-action]');
     targetForm = document.querySelector('form[name=select-target]');
     spellForm = document.querySelector('form[name=select-spell]');
+    againForm = document.querySelector('form[name=play-again]');
     infoPanel = document.querySelector('#battle-info');
 
 
