@@ -41,7 +41,7 @@ battle.on('start', function (data) {
 
 battle.on('turn', function (data) {
     console.log('TURN', data);
-    // HECHO - TODO: render the characters. No sabemos como poner bat 2, si los que nos devuelve el metodo son todos bat.
+    // HECHO - TODO: render the characters.
 	var heroes, monsters, listas;
 	listas = document.querySelectorAll('.character-list');
 	heroes = listas[0];
@@ -79,7 +79,7 @@ battle.on('turn', function (data) {
 	i++
 	}
     // HECHO - TODO: highlight current character
-	//el querySelector no funciona con bat 2.
+
 	var currentCh = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');//AQUI SE LLAMABA SOLO POR "ID", LO CORRECTO ERA"DATA-CHAR-ID"
 	currentCh.classList.add("active");
 
@@ -178,7 +178,7 @@ window.onload = function () {
         // TODO: select the action chosen by the player
 		var action = actionForm.elements['option'].value;
 		battle.options.select(action);
-		//He hecho el required en el TODO show battle action porque supongo que se puede añadir required allí.
+
 
         // TODO: hide this menu
 		actionForm.style.display = 'none';
@@ -192,15 +192,15 @@ window.onload = function () {
 			if (charParty === 'monsters'){
 				enemiesParty = 'heroes';
 			}
-			else enemiesParty = 'monsters';
+			else  enemiesParty = 'monsters';
+
 			var chars = battle.characters.allFrom(enemiesParty);
 			var charKeys = Object.keys(chars);
 			targets[0].innerHTML = "";
 			var i = 0;
 			for(var obj in chars){
 				if (chars[obj].hp > 0){
-
-			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+			    targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
 				}
 				i++;
     }
