@@ -10,7 +10,7 @@ function prettifyEffect(obj) {
         return `${sign}${obj[key]} ${key}`;
     }).join(', ');
 }
- 
+
 
 battle.setup({
     heroes: {
@@ -20,7 +20,7 @@ battle.setup({
         ],
         grimoire: [
             RPG.entities.scrolls.health,
-            RPG.entities.scrolls.fireball 
+            RPG.entities.scrolls.fireball
         ]
     },
     monsters: {
@@ -54,14 +54,14 @@ battle.on('turn', function (data) {
 	heroes.innerHTML = "";
 	var j = 0;
 	for (var obj in arrayH) {
-		
+
 
 			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
       if(arrayH[obj].hp === 0){
         var heroeDead = document.querySelector('[data-chara-id="'+arrayH[obj].name+'"]');
         heroeDead.classList.add("dead");
-      }  
+      }
 		j++;
 	}
 	monsters.innerHTML = "";
@@ -70,13 +70,13 @@ battle.on('turn', function (data) {
 
 			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
 			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
-			
-		
+
+
     if(arrayM[obj].hp === 0){
-      var monsterDead = document.querySelector('[data-chara-id="'+arrayM[obj].name+'"]');
+      var monsterDead = document.querySelector('[data-chara-id="'+MonstersKeys[i]/*arrayM[obj].name*/+'"]');//Corregido
       monsterDead.classList.add("dead");
-    } 
-	i++	
+    }
+	i++
 	}
     // HECHO - TODO: highlight current character
 	//el querySelector no funciona con bat 2.
@@ -97,7 +97,7 @@ battle.on('turn', function (data) {
 
 });
 
-battle.on('info', function (data) { 
+battle.on('info', function (data) {
     console.log('INFO', data);
     // TODO: display turn info in the #battle-info panel
 	 infoPanel = document.querySelector('#battle-info');
@@ -106,10 +106,10 @@ battle.on('info', function (data) {
 	 }
 	 if (data.action === 'attack'){
 		 var effectsTxT = prettifyEffect(data.effect || {});
-		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> attacked <strong>${data.targetId}</strong> ${data.success ? ' and caused' 
+		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> attacked <strong>${data.targetId}</strong> ${data.success ? ' and caused'
 		 : 'and failed '} ${data.success ? effectsTxT : ''}`;
 	 }
-	if (data.action === 'cast'){ 
+	if (data.action === 'cast'){
 		var effectsTxT = prettifyEffect(data.effect || {});
 		 infoPanel.innerHTML =`<strong>${data.activeCharacterId}</strong> casted <em>${data.scrollName}</em> on <strong>${data.targetId}</strong> ${data.success ? ' and caused'
 			: 'and failed' } ${data.success ? effectsTxT : ''}`;
@@ -135,14 +135,14 @@ battle.on('end', function (data) {
 	heroes.innerHTML = "";
 	var j = 0;
 	for (var obj in arrayH) {
-		
+
 
 			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
       if(arrayH[obj].hp === 0){
         var heroeDead = document.querySelector('[data-chara-id="'+arrayH[obj].name+'"]');
         heroeDead.classList.add("dead");
-      }  
+      }
 		j++;
 	}
 	monsters.innerHTML = "";
@@ -151,15 +151,15 @@ battle.on('end', function (data) {
 
 			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
 			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
-			
-		
+
+
     if(arrayM[obj].hp === 0){
       var monsterDead = document.querySelector('[data-chara-id="'+arrayM[obj].name+'"]');
       monsterDead.classList.add("dead");
-    } 
-	i++	
+    }
+	i++
 	}
-	
+
 	actionForm.style.display = 'none';
     // TODO: display 'end of battle' message, showing who won
 	infoPanel.innerHTML = `Battle is over! Winners were ${data.winner}`;
@@ -171,7 +171,7 @@ window.onload = function () {
     spellForm = document.querySelector('form[name=select-spell]');
     infoPanel = document.querySelector('#battle-info');
 
-	
+
     actionForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
 
@@ -213,14 +213,14 @@ window.onload = function () {
 			var partyGrimoire = battle._grimoires[charParty];
 			var spellButton = spellForm.lastElementChild;
 			spellButton = spellButton.firstChild;
-			if (partyGrimoire.hasOwnProperty('fireball') ){				
-				spellButton.disabled = false;  
-				spells[0].innerHTML = ""; 
-				for (var obj in partyGrimoire){ 
+			if (partyGrimoire.hasOwnProperty('fireball') ){
+				spellButton.disabled = false;
+				spells[0].innerHTML = "";
+				for (var obj in partyGrimoire){
 					spells[0].innerHTML += `<li><label><input type="radio" name="option" value="${partyGrimoire[obj].name}" required>${partyGrimoire[obj].name}</label></li>`;
 				}
 			}
-			else{  
+			else{
 				spells[0].innerHTML = "";
 				spellButton.disabled = true;
 			}
@@ -247,11 +247,11 @@ window.onload = function () {
         // TODO: hide this form
 		targetForm.style.display = 'none';
         // TODO: go to select action menu
-		var action =  battle._action.action; 
+		var action =  battle._action.action;
 		if (action === 'cast'){
 			spellForm.style.display = 'block';
 		}else{
-		actionForm.style.display = 'block'; 
+		actionForm.style.display = 'block';
 		}
     });
 
@@ -280,7 +280,7 @@ window.onload = function () {
 			targets[0].innerHTML = "";
 			var i = 0;
 			for(var obj in chars){
-				if (chars[obj].hp > 0){ 
+				if (chars[obj].hp > 0){
 
 			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
 				}
