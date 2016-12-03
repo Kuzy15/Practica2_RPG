@@ -14,10 +14,10 @@ function prettifyEffect(obj) {
 
 battle.setup({
     heroes: {
-        members: [
+        members: randomParty()/*[
             RPG.entities.characters.heroTank,
             RPG.entities.characters.heroWizard
-        ],
+        ]*/,
         grimoire: [
             RPG.entities.scrolls.health,
             RPG.entities.scrolls.fireball
@@ -30,8 +30,20 @@ battle.setup({
             RPG.entities.characters.monsterSkeleton,
             RPG.entities.characters.monsterBat
         ]
+
     }
 });
+
+function randomParty() {
+ var members = [];
+ var numeroPjs = 4;
+ for(var i = 0; i < numeroPjs; i++){
+   var random = Math.floor(Math.random() * ( 3 - 1) + 1);
+   if(random < 2)  members[i] = RPG.entities.characters.heroTank;
+   else if(random === 2) members[i] = RPG.entities.characters.heroWizard;
+ }
+ return members;
+}
 
 
 battle.on('start', function (data) {
@@ -59,7 +71,7 @@ battle.on('turn', function (data) {
 			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
 			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
       if(arrayH[obj].hp === 0){
-        var heroeDead = document.querySelector('[data-chara-id="'+arrayH[obj].name+'"]');
+        var heroeDead = document.querySelector('[data-chara-id="'+HeroesKeys[j]/*arrayH[obj].name*/+'"]');//Corregido
         heroeDead.classList.add("dead");
       }
 		j++;
