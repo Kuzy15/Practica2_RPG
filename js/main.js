@@ -11,6 +11,45 @@ function prettifyEffect(obj) {
     }).join(', ');
 }
 
+function renderCharacters() {
+  var heroes, monsters, listas;
+	listas = document.querySelectorAll('.character-list');
+	heroes = listas[0];
+	monsters = listas[1];
+	var arrayH, arrayM;
+	arrayH = battle.characters.allFrom('heroes');
+	arrayM = battle.characters.allFrom('monsters');
+	HeroesKeys = Object.keys(arrayH);
+	MonstersKeys = Object.keys(arrayM);
+	heroes.innerHTML = "";
+	var j = 0;
+	for (var obj in arrayH) {
+
+
+			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
+			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
+      if(arrayH[obj].hp === 0){
+        var heroeDead = document.querySelector('[data-chara-id="'+HeroesKeys[j]/*arrayH[obj].name*/+'"]');//Corregido
+        heroeDead.classList.add("dead");
+      }
+		j++;
+	}
+	monsters.innerHTML = "";
+	var i = 0;
+	for (var obj in arrayM) {
+
+			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
+			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
+
+
+    if(arrayM[obj].hp === 0){
+      var monsterDead = document.querySelector('[data-chara-id="'+MonstersKeys[i]/*arrayM[obj].name*/+'"]');//Corregido
+      monsterDead.classList.add("dead");
+    }
+	i++
+	}
+}
+
 
 battle.setup({
     heroes: {
@@ -54,42 +93,7 @@ battle.on('start', function (data) {
 battle.on('turn', function (data) {
     console.log('TURN', data);
     // HECHO - TODO: render the characters.
-	var heroes, monsters, listas;
-	listas = document.querySelectorAll('.character-list');
-	heroes = listas[0];
-	monsters = listas[1];
-	var arrayH, arrayM;
-	arrayH = battle.characters.allFrom('heroes');
-	arrayM = battle.characters.allFrom('monsters');
-	HeroesKeys = Object.keys(arrayH);
-	MonstersKeys = Object.keys(arrayM);
-	heroes.innerHTML = "";
-	var j = 0;
-	for (var obj in arrayH) {
-
-
-			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
-			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-      if(arrayH[obj].hp === 0){
-        var heroeDead = document.querySelector('[data-chara-id="'+HeroesKeys[j]/*arrayH[obj].name*/+'"]');//Corregido
-        heroeDead.classList.add("dead");
-      }
-		j++;
-	}
-	monsters.innerHTML = "";
-	var i = 0;
-	for (var obj in arrayM) {
-
-			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
-			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
-
-
-    if(arrayM[obj].hp === 0){
-      var monsterDead = document.querySelector('[data-chara-id="'+MonstersKeys[i]/*arrayM[obj].name*/+'"]');//Corregido
-      monsterDead.classList.add("dead");
-    }
-	i++
-	}
+	renderCharacters();
     // HECHO - TODO: highlight current character
 
 	var currentCh = document.querySelector('[data-chara-id="'+data.activeCharacterId+'"]');//AQUI SE LLAMABA SOLO POR "ID", LO CORRECTO ERA"DATA-CHAR-ID"
@@ -135,42 +139,7 @@ battle.on('info', function (data) {
 battle.on('end', function (data) {
     console.log('END', data);
     // TODO: re-render the parties so the death of the last character gets reflected
-	var heroes, monsters, listas;
-	listas = document.querySelectorAll('.character-list');
-	heroes = listas[0];
-	monsters = listas[1];
-	var arrayH, arrayM;
-	arrayH = battle.characters.allFrom('heroes');
-	arrayM = battle.characters.allFrom('monsters');
-	HeroesKeys = Object.keys(arrayH);
-	MonstersKeys = Object.keys(arrayM);
-	heroes.innerHTML = "";
-	var j = 0;
-	for (var obj in arrayH) {
-
-
-			heroes.innerHTML +=`<li data-chara-id="${HeroesKeys[j]}">${HeroesKeys[j]} (HP: <strong>${arrayH[obj].hp}</strong>/${arrayH[obj].maxHp}
-			, MP: <strong>${arrayH[obj].mp}</strong>/${arrayH[obj].maxMp})</li>`;
-      if(arrayH[obj].hp === 0){
-        var heroeDead = document.querySelector('[data-chara-id="'+arrayH[obj].name+'"]');
-        heroeDead.classList.add("dead");
-      }
-		j++;
-	}
-	monsters.innerHTML = "";
-	var i = 0;
-	for (var obj in arrayM) {
-
-			monsters.innerHTML +=`<li data-chara-id="${MonstersKeys[i]}">${MonstersKeys[i]} (HP: <strong>${arrayM[obj].hp}</strong>/${arrayM[obj].maxHp}
-			, MP: <strong>${arrayM[obj].mp}</strong>/${arrayM[obj].maxMp})</li>`;
-
-
-    if(arrayM[obj].hp === 0){
-      var monsterDead = document.querySelector('[data-chara-id="'+arrayM[obj].name+'"]');
-      monsterDead.classList.add("dead");
-    }
-	i++
-	}
+	renderCharacters();
 
 	actionForm.style.display = 'none';
     // TODO: display 'end of battle' message, showing who won
