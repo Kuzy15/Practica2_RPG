@@ -183,7 +183,11 @@ window.onload = function () {
 			var i = 0;
 			for(var obj in chars){
 				if (chars[obj].hp > 0){
-			    targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+          if(enemiesParty === 'heroes')
+            targets[0].innerHTML += `<li><label class="heroes"><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+          else
+            targets[0].innerHTML += `<li><label class="monsters"><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+
 				}
 				i++;
     }
@@ -257,6 +261,7 @@ window.onload = function () {
 			var chars;
 			if(spell === 'health'){
 			chars = battle.characters.allFrom(charParty);
+      enemiesParty='heroes';
 			}
 			else {chars = battle.characters.allFrom(enemiesParty);}
 			charKeys = Object.keys(chars);
@@ -264,8 +269,9 @@ window.onload = function () {
 			var i = 0;
 			for(var obj in chars){
 				if (chars[obj].hp > 0){
-
-			targets[0].innerHTML += `<li><label><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+          if(enemiesParty === 'heroes')
+            targets[0].innerHTML += `<li><label class="heroes"><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
+          else targets[0].innerHTML += `<li><label class="monsters"><input type="radio" name="option" value="${charKeys[i]}" required>${charKeys[i]}</label></li>`;
 				}
 				i++;
 			}

@@ -92,12 +92,12 @@ button, input, select {
 
 .monsters {
 
-  color: #FF0000;
+color: red;
 }
 
 .heroes {
 
-  color: #58D3F7;
+color: blue;
 }
 
 .info {
